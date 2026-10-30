@@ -1652,6 +1652,10 @@
     <string name="effective_replaces">Effective Replacement</string>
     <string name="export_book">Export Book</string>
     <string name="export_book_notification_content">Exporting (%1$s), with %2$d to be exported.</string>
+    <string name="export_cached_epub">Export cached content (EPUB)</string>
+    <string name="export_cached_epub_started">Exporting cached chapters. You will be notified when it is done.</string>
+    <string name="no_cached_content_to_export">No cached chapters to export</string>
+    <string name="cached_epub_file_name_suffix">" (cached chapters %1$s)"</string>
     <string name="export_md">Export(MD)</string>
     <string name="change_source_delay">Change source delay</string>
     <string name="change_source_progress">Result %1$d</string>

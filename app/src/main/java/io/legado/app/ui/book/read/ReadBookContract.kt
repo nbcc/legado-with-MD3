@@ -548,7 +548,7 @@ internal val ReadBookButtonIds = listOf(
 
 internal val MoreActionIds = listOf(
     "source_custom_button", "source_login", "source_pay", "edit_source", "disable_source",
-    "change_source", "refresh", "download", "audio_download",
+    "change_source", "refresh", "download", "export_cached_epub", "audio_download",
     "ai_chat", "edit_content", "add_bookmark",
     "text_processing", "reverse_content", "re_segment",
     "del_ruby", "del_h", "toc_rule", "charset", "image_style", "page_anim",
@@ -1133,6 +1133,9 @@ sealed interface ReadBookIntent {
     // Download chapters
     data class DownloadChapters(val start: Int, val end: Int) : ReadBookIntent
 
+    /** 把已经落盘的章节正文导出成一个 EPUB（仅联网书）。 */
+    data object ExportCachedEpub : ReadBookIntent
+
     // Save chapter content (from chapter source change)
     data class SaveChapterContent(val content: String, val chapterIndex: Int) : ReadBookIntent
 
@@ -1286,6 +1289,9 @@ sealed interface ReadBookEffect {
 
     // Export — Activity handles file writing
     data class ExportJson(val json: String) : ReadBookEffect
+
+    /** 选择导出目录后交给 ExportBookService 写出单本已缓存 EPUB。 */
+    data class OpenCachedEpubExportPicker(val bookUrl: String) : ReadBookEffect
 }
 
 @Immutable

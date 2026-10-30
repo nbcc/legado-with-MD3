@@ -503,6 +503,17 @@ class ReadBookDomainSplitBoundaryTest {
                     "useCase.ensureConfigured",
                 ),
             ),
+            // 已缓存导出域无自持状态：缓存章节统计与导出入口都在 delegate，VM 只转发意图；
+            // EPUB 生成、章节筛选和带区段的文件名在 ExportBookService。
+            DomainSplit(
+                name = "已缓存导出",
+                delegateFile = "io/legado/app/ui/book/read/CachedExportDelegate.kt",
+                stateFields = emptySet(),
+                stateTypes = listOf(
+                    "countCachedContentChapters",
+                    "OpenCachedEpubExportPicker",
+                ),
+            ),
         )
 
         val APP_DB_DAO = Regex("""\bappDb\.[A-Za-z0-9_]*Dao\b""")

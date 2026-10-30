@@ -1340,6 +1340,10 @@
     <string name="effective_replaces">起效的替换</string>
     <string name="export_book">导出书籍</string>
     <string name="export_book_notification_content">正在导出(%1$s),还有%2$d本待导出</string>
+    <string name="export_cached_epub">導出已快取（EPUB）</string>
+    <string name="export_cached_epub_started">正在導出已快取章節，完成後會通知</string>
+    <string name="no_cached_content_to_export">沒有已快取的章節可導出</string>
+    <string name="cached_epub_file_name_suffix">（已快取章節 %1$s）</string>
     <string name="export_md">导出(MD)</string>
     <string name="change_source_delay">换源间隔</string>
     <string name="change_source_progress">結果 %1$d</string>

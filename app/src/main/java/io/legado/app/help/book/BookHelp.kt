@@ -753,6 +753,22 @@ object BookHelp {
         }
     }
 
+    /**
+     * 可导出为正文的已缓存章节：卷名没有正文，不算缓存内容。
+     */
+    fun isCachedContentChapter(book: Book, bookChapter: BookChapter): Boolean {
+        return !bookChapter.isVolume && hasContent(book, bookChapter)
+    }
+
+    /**
+     * 已缓存正文章节数，用于导出前的可用性判断。
+     */
+    fun countCachedContentChapters(book: Book): Int {
+        return appDb.bookChapterDao.getChapterList(book.bookUrl).count { chapter ->
+            isCachedContentChapter(book, chapter)
+        }
+    }
+
     fun isChapterCacheComplete(book: Book, bookChapter: BookChapter): Boolean {
         return if (book.isLocal) {
             hasContent(book, bookChapter)

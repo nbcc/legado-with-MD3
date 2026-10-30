@@ -2620,6 +2620,7 @@ class ReadBookController(
             is ReadBookEffect.MenuTocRegex,
             is ReadBookEffect.OpenFontFolderPicker,
             is ReadBookEffect.OpenBooksDirPicker,
+            is ReadBookEffect.OpenCachedEpubExportPicker,
             is ReadBookEffect.OpenReadStyleImagePicker,
             is ReadBookEffect.OpenReadStyleImagePickerForMode,
             is ReadBookEffect.OpenReadStyleImport,

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.FindReplace
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.SwapVert
@@ -350,6 +351,10 @@ private fun moreActionSpecs(
         "download", stringResource(R.string.offline_cache), Icons.Default.CloudDownload,
         applicable = isReadMenuActionApplicable("download", state),
         onClick = { onIntent(ReadBookIntent.ShowSheet(ReadBookSheet.Download)) }),
+    MoreActionSpec(
+        "export_cached_epub", stringResource(R.string.export_cached_epub), Icons.Default.SaveAlt,
+        applicable = isReadMenuActionApplicable("export_cached_epub", state),
+        onClick = { dispatch(ReadBookIntent.ExportCachedEpub) }),
     MoreActionSpec(
         "audio_download",
         stringResource(R.string.read_aloud_audio_download_entry), Icons.Default.Download,

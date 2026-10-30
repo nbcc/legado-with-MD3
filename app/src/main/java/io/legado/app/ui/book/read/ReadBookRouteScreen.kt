@@ -70,6 +70,7 @@ import dev.chrisbanes.haze.hazeSource
 import io.legado.app.R
 import io.legado.app.constant.AppLog
 import io.legado.app.constant.BookType
+import io.legado.app.constant.IntentAction
 import io.legado.app.constant.ReadMenuBlurMode
 import io.legado.app.feature.reader.ReaderBackgroundSurface
 import io.legado.app.feature.reader.ReaderCanvasSurface
@@ -82,6 +83,7 @@ import io.legado.app.help.IntentHelp
 import io.legado.app.model.ReadBook
 import io.legado.app.model.SourceCallBack
 import io.legado.app.model.translation.TranslationChapterStatus
+import io.legado.app.service.ExportBookService
 import io.legado.app.ui.book.read.page.entities.PageDirection
 import io.legado.app.ui.book.read.sheet.CastSheetVisuals
 import io.legado.app.ui.book.read.sheet.LocalCastSheetVisuals
@@ -97,6 +99,8 @@ import io.legado.app.ui.replace.ReplaceEditRoute
 import io.legado.app.ui.theme.LegadoTheme
 import io.legado.app.ui.theme.LocalAppUiConfiguration
 import io.legado.app.ui.widget.components.text.AppText
+import io.legado.app.utils.isContentScheme
+import io.legado.app.utils.startService
 import io.legado.app.utils.takePersistablePermissionSafely
 import io.legado.app.utils.toastOnUi
 import kotlinx.coroutines.CancellationException
@@ -285,6 +289,28 @@ fun ReadBookRouteScreen(
         }
     }
 
+    // 已缓存正文导出：选定目录后由 ExportBookService 统一生成单文件 EPUB，
+    // 文件名包含缓存章节区段，避免同一本书多次缓存互相覆盖。
+    var pendingCachedEpubBookUrl by remember { mutableStateOf<String?>(null) }
+    val cachedEpubExportDirPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        val bookUrl = pendingCachedEpubBookUrl
+        pendingCachedEpubBookUrl = null
+        if (uri == null || bookUrl == null) return@rememberLauncherForActivityResult
+        uri.takePersistablePermissionSafely(context)
+        val path = if (uri.isContentScheme()) uri.toString() else uri.path
+        if (path.isNullOrEmpty()) return@rememberLauncherForActivityResult
+        context.startService<ExportBookService> {
+            action = IntentAction.start
+            putExtra("bookUrl", bookUrl)
+            putExtra("exportType", "epub")
+            putExtra("exportPath", path)
+            putExtra("onlyCached", true)
+        }
+        context.toastOnUi(R.string.export_cached_epub_started)
+    }
+
     val readStyleImagePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -449,6 +475,10 @@ fun ReadBookRouteScreen(
                             }
                             is ReadBookEffect.OpenBooksDirPicker -> {
                                 booksDirPicker.launch(null)
+                            }
+                            is ReadBookEffect.OpenCachedEpubExportPicker -> {
+                                pendingCachedEpubBookUrl = effect.bookUrl
+                                cachedEpubExportDirPicker.launch(null)
                             }
                             is ReadBookEffect.OpenReadStyleImagePicker -> {
                                 readStyleImagePicker.launch("image/*")

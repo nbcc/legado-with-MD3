@@ -1609,6 +1609,7 @@ class ReadBookViewModel(
             is ReadBookIntent.DownloadChapters -> {
                 _effects.tryEmit(ReadBookEffect.DownloadChapters(intent.start, intent.end))
             }
+            is ReadBookIntent.ExportCachedEpub -> CachedExportDelegate(viewModelScope, context) { _effects.tryEmit(it) }.exportCachedEpub()
 
             is ReadBookIntent.SaveChapterContent -> {
                 ReadBook.book?.let {

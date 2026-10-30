@@ -105,7 +105,7 @@ internal data class ReadMenuActionDef(
  */
 internal fun isReadMenuActionApplicable(id: String, state: ReadBookUiState): Boolean = when (id) {
     "source_custom_button" -> !state.isLocalBook && state.bookSource?.customButton == true
-    "change_source", "refresh", "download" -> !state.isLocalBook
+    "change_source", "refresh", "download", "export_cached_epub" -> !state.isLocalBook
     "source_login" -> !state.isLocalBook && !state.bookSource?.loginUrl.isNullOrBlank()
     // 与顶栏书源菜单同一判定：只在「VIP 且未购买」的章节可付费
     "source_pay" -> state.chapterPayable
@@ -120,7 +120,8 @@ internal fun isReadMenuActionApplicable(id: String, state: ReadBookUiState): Boo
  * 标注只是提示——配置仍然只存一份，靠 [isReadMenuActionApplicable] 决定实际显隐。
  */
 internal fun readMenuActionScopeLabelRes(id: String): Int? = when (id) {
-    "source_custom_button", "change_source", "refresh", "download" -> R.string.only_online_books
+    "source_custom_button", "change_source", "refresh", "download", "export_cached_epub" ->
+        R.string.only_online_books
     "source_login", "source_pay", "edit_source", "disable_source" -> R.string.only_online_books
     "toc_rule", "charset" -> R.string.only_local_books
     else -> null
