@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: '要构建的分支'
-        required: true
-        default: 'trae/solo-agent-vhkVM3'
+        description: '要构建的分支（留空则使用当前选择的 workflow 分支）'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.event.inputs.branch || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up JDK 21
